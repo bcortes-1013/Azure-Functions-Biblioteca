@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 1. Base de Datos
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim
+    container_name: oracle-biblioteca
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PASSWORD=Admin123456
+      - APP_USER=BIBLIO_USER
+      - APP_USER_PASSWORD=BiblioPass123
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+      - ./init.sql:/container-entrypoint-initdb.d/init.sql
+
+  # 2. BFF
+  library-bff:
+    build: 
+      context: ./bff-app
+      dockerfile: Dockerfile
+    container_name: bff-biblioteca
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521/XE
+      - SPRING_DATASOURCE_USERNAME=BIBLIO_USER
+      - SPRING_DATASOURCE_PASSWORD=BiblioPass123
+      - AZURE_FUNCTIONS_URL=https://tu-app-en-azure.azurewebsites.net/api/
+    depends_on:
+      - oracle-db
+
+volumes:
+  oracle_data:
