@@ -1,19 +1,16 @@
 version: '3.8'
 
 services:
-  # 1. Base de Datos
-  oracle-db:
-    image: gvenzl/oracle-xe:21-slim
-    container_name: oracle-biblioteca
+  # 1. Base de Datos SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-db
     ports:
-      - "1521:1521"
+      - "1433:1433"
     environment:
-      - ORACLE_PASSWORD=Admin123456
-      - APP_USER=BIBLIO_USER
-      - APP_USER_PASSWORD=BiblioPass123
-    volumes:
-      - oracle_data:/opt/oracle/oradata
-      - ./init.sql:/container-entrypoint-initdb.d/init.sql
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=CloudBiblioteca123!
+      - MSSQL_PID=Developer
 
   # 2. BFF
   library-bff:
@@ -24,12 +21,12 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521/XE
-      - SPRING_DATASOURCE_USERNAME=BIBLIO_USER
-      - SPRING_DATASOURCE_PASSWORD=BiblioPass123
-      - AZURE_FUNCTIONS_URL=https://tu-app-en-azure.azurewebsites.net/api/
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=master;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=CloudBiblioteca123!
+      - AZURE_FUNCTIONS_URL=https://api-biblioteca-grupo11.azurewebsites.net/api/
     depends_on:
-      - oracle-db
+      - sqlserver
 
 volumes:
-  oracle_data:
+  sql_data:
