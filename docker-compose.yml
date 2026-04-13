@@ -1,32 +1,11 @@
 version: '3.8'
 
 services:
-  # 1. Base de Datos SQL Server
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlserver-db
+  bff-biblioteca:
+    image: bcortes1013/bff-biblioteca:latest
+    container_name: bff_app
     ports:
-      - "1433:1433"
+      - "80:8080"
     environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=CloudBiblioteca123!
-      - MSSQL_PID=Developer
-
-  # 2. BFF
-  library-bff:
-    build: 
-      context: ./bff-app
-      dockerfile: Dockerfile
-    container_name: bff-biblioteca
-    ports:
-      - "8080:8080"
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=master;trustServerCertificate=true
-      - SPRING_DATASOURCE_USERNAME=sa
-      - SPRING_DATASOURCE_PASSWORD=CloudBiblioteca123!
       - AZURE_FUNCTIONS_URL=https://api-biblioteca-grupo11.azurewebsites.net/api/
-    depends_on:
-      - sqlserver
-
-volumes:
-  sql_data:
+    restart: always

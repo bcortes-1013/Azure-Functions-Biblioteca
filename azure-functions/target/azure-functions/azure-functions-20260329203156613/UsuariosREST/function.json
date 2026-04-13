@@ -1,0 +1,16 @@
+{
+  "scriptFile" : "../azure-functions-1.0-SNAPSHOT.jar",
+  "entryPoint" : "com.duoc.biblioteca.functions.UsuariosREST.run",
+  "bindings" : [ {
+    "type" : "httpTrigger",
+    "direction" : "in",
+    "name" : "req",
+    "route" : "usuarios/{id?}",
+    "methods" : [ "GET", "POST", "PUT", "DELETE" ],
+    "authLevel" : "ANONYMOUS"
+  }, {
+    "type" : "http",
+    "direction" : "out",
+    "name" : "$return"
+  } ]
+}

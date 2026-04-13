@@ -1,0 +1,4 @@
+com\duoc\biblioteca\functions\PrestamosREST.class
+com\duoc\biblioteca\functions\ConsultarPrestamosGQL.class
+com\duoc\biblioteca\functions\ListarUsuariosGQL.class
+com\duoc\biblioteca\functions\UsuariosREST.class
