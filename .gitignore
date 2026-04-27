@@ -1,0 +1,13 @@
+# Azure Functions locales (Secretos)
+**/local.settings.json
+
+# Archivos de compilación de Java (Maven)
+**/target/
+*.class
+
+# Configuraciones de VS Code y entorno
+.vscode/
+.env
+
+# Archivos temporales de logs
+*.log
